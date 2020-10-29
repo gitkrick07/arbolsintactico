@@ -1,0 +1,17 @@
+{
+    "name": "arbolsintactico",
+    "version": "1.0.0",
+    "description": "arbolsintacticodeexpresiones",
+    "main": "src/index.js",
+    "scripts": {
+        "start": "electron ."
+    },
+    "keywords": [
+        "arbolsintactico"
+    ],
+    "author": "kevinpilo",
+    "license": "ISC",
+    "devDependencies": {
+        "electron": "^10.1.3"
+    }
+}
