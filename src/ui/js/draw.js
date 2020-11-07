@@ -56,10 +56,22 @@ function drawLine2(i, f, ii, ff) {
 
 }
 
+function drawLine3(i, f, ii, ff) {
+    ctx.beginPath();
+    ctx.moveTo(i + 50, f + 50);
+    //  ctx.lineTo(ii, f);
+    ctx.lineTo(ii + 20, ff + 50);
+    ctx.lineWidth = 2;
+    ctx.strokeStyle = "black";
+    ctx.stroke();
+
+}
+
 module.exports = {
     drawRec,
     drawCircle,
     drawLine,
-    drawLine2
+    drawLine2,
+    drawLine3
 
 };

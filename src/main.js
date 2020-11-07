@@ -13,7 +13,7 @@ function createWindow() {
 
     })
 
-    // Menu.setApplicationMenu(null);
+    //Menu.setApplicationMenu(null);
     mainWindow.loadFile('src/ui/html/index.html');
 }
 

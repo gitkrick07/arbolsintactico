@@ -3,7 +3,7 @@ var ctx = canvas.getContext("2d");
 const fx = document.getElementById('fx');
 
 
-const { drawCircle, drawRec, drawLine, drawLine2 } = require('../js/draw');
+const { drawCircle, drawRec, drawLine, drawLine2, drawLine3 } = require('../js/draw');
 const { Stack } = require('../js/stack');
 
 
@@ -13,9 +13,6 @@ const resolver = document.getElementById('resolver');
 const container = document.querySelector(".container");
 
 
-nuevo.addEventListener('click', function() {
-    container.classList.remove("sign-up-mode");
-})
 
 
 
@@ -243,26 +240,36 @@ function drawTree() {
 
     for (let dR = 0; dR < lStackRight; dR++) {
         var ir = 2;
+
         let nodoR = stackRight.pop();
         for (let drR = 0; drR < nodoR.length; drR++) {
+
             if (rgex.number.test(nodoR[drR])) {
 
                 drawRec(coordX[rX + dxNR], coordY[rY + dyNR], longRecX[0], longRecY[0], nodoR[drR + ir]);
+
                 dxNR = dxNR - 1;
                 ir = -2;
 
-            } else {
-                drawLine(coordX[rX], coordY[rY], coordX[(rX + dxNR)], coordY[((rY + dyNR) - 1)]);
+            } else if (dR == 0) {
+                drawLine(coordX[rX], coordY[rY], coordX[(rX + 3)], coordY[(rY + 1)]);
                 drawLine2(coordX[rX + dxNR], coordY[(rY + dyNR) - 1], coordX[rX + (dxNR + 1)], coordY[rY + (dyNR)]);
                 drawLine2(coordX[rX + dxNR], coordY[(rY + dyNR) - 1], coordX[rX + (dxNR - 1)], coordY[rY + (dyNR)]);
                 drawCircle(coordX[rX + dxNR], coordY[(rY + dyNR) - 1], radioCircle[2], nodoR[drR]);
-
                 dxNR = dxNR - 1;
 
+            } else {
+                drawLine3(coordX[rX + 4], coordY[rY + 1], coordX[((rX + dxNR) + 4)], coordY[((rY + dyNR) + 1)]);
+                drawLine3(coordX[(rX + dxNR)], coordY[((rY + dyNR) - 1)], coordX[(rX + dxNR) + 2], coordY[((rY + dyNR) - 1)]);
+                drawLine2(coordX[rX + dxNR], coordY[(rY + dyNR) - 1], coordX[rX + (dxNR + 1)], coordY[rY + (dyNR)]);
+                drawLine2(coordX[rX + dxNR], coordY[(rY + dyNR) - 1], coordX[rX + (dxNR - 1)], coordY[rY + (dyNR)]);
+                drawCircle(coordX[rX + dxNR], coordY[(rY + dyNR) - 1], radioCircle[2], nodoR[drR]);
+                dxNR = dxNR - 1;
 
             }
 
         }
+
 
         dxNR = dxNR - 1;
         dyNR = dyNR - 2;
@@ -277,7 +284,9 @@ function drawTree() {
         for (let s = 0; s < lStackSubRight - 1; s++) {
             let subR = stackSubRaizR.pop();
             console.log(subR);
+
             drawCircle(coordX[rX + dxSR], coordY[rY + (dySR - 2)], radioCircle[2], subR[s]);
+
             dxSR = dxSR - 3;
             dySR = dySR - 2;
         }
@@ -287,13 +296,82 @@ function drawTree() {
 
 }
 
+function oneTree() {
+    var rXs = 6;
+    var rYs = 0;
+
+
+    var dxNL = xNL;
+    var dyNL = yNL;
+    var lStackLeft = stackLeft.size();
+    for (let l = 0; l < lStackLeft; l++) {
+
+        let nodoL = stackLeft.pop();
+        nodoLN = nodoL.split(/\-|\+|\*|\//);
+        console.log(nodoLN);
+
+        console.log(nodoL);
+
+        for (let dL = 0; dL < nodoL.length; dL++) {
+
+            if (rgex.number.test(nodoL[dL])) {
+
+                drawRec(coordX[rXs - dxNL], coordY[rYs + dyNL], longRecX[0], longRecY[0], nodoL[dL]);
+                dxNL = dxNL - 1;
+
+
+            } else {
+                //  drawLine(coordX[rXs], coordY[rYs], coordX[rXs - dxNL], coordY[(rYs + dyNL) - 1]);
+                drawLine2(coordX[rXs - dxNL], coordY[(rYs + dyNL) - 1], coordX[rXs - (dxNL + 1)], coordY[rYs + dyNL]);
+                drawLine2(coordX[rXs - dxNL], coordY[(rYs + dyNL) - 1], coordX[rXs - (dxNL - 1)], coordY[rYs + dyNL]);
+                drawCircle(coordX[rXs - dxNL], coordY[(rYs + dyNL) - 1], radioCircle[2], nodoL[dL]);
+
+                dxNL = dxNL - 1;
+
+            }
+
+        }
+        dyNL = dyNL - 2;
+        dxNL = dxNL - 1;
+    }
+}
+
+nuevo.addEventListener('click', function() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    bRaiz = 1;
+    xSL = 0;
+    ySL = 1;
+    xSR = 0;
+    ySR = 1;
+
+
+    xNL = 0;
+    yNL = 0;
+    xNR = 1;
+    yNR = 0;
+
+
+
+    stackLeft.pop();
+    stackRight.pop();
+    stackSubRaizL.pop();
+    stackSubRaizR.pop();
+
+    container.classList.remove("sign-up-mode");
+})
+
 
 
 resolver.addEventListener('click', function() {
 
 
     stacks(mainToken);
-    drawTree();
+    if (bRaiz === 1) {
+        oneTree();
+    } else {
+        drawTree();
+
+    }
     container.classList.add("sign-up-mode");
 });
 
